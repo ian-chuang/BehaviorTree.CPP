@@ -26,7 +26,8 @@ TreeNode::TreeNode(std::string name, NodeConfiguration config)
   : name_(std::move(name)),
     status_(NodeStatus::IDLE),
     uid_(getUID()),
-    config_(std::move(config))
+    config_(std::move(config)),
+    parent_(nullptr)
 {
 }
 
