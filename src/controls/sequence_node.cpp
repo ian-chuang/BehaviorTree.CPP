@@ -43,11 +43,11 @@ TreeNode* SequenceNode::getNextSibling(TreeNode* child) {
 
 NodeStatus SequenceNode::tick()
 {
-    const size_t children_count = children_nodes_.size();
+    // const size_t children_count = children_nodes_.size();
 
     setStatus(NodeStatus::RUNNING);
 
-    while (current_child_idx_ < children_count)
+    while (current_child_idx_ < children_nodes_.size())
     {
         TreeNode* current_child_node = children_nodes_[current_child_idx_];
         const NodeStatus child_status = current_child_node->executeTick();
@@ -58,7 +58,7 @@ NodeStatus SequenceNode::tick()
             {
                 return child_status;
             }
-            case NodeStatus::FAILURE:
+            case NodeStatus::FAILURE: 
             {
                 // Reset on failure
                 haltChildren();
@@ -79,7 +79,7 @@ NodeStatus SequenceNode::tick()
     }       // end while loop
 
     // The entire while loop completed. This means that all the children returned SUCCESS.
-    if (current_child_idx_ == children_count)
+    if (current_child_idx_ == children_nodes_.size())
     {
         haltChildren();
         current_child_idx_ = 0;
