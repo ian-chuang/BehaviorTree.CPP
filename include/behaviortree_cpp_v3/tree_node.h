@@ -82,6 +82,8 @@ public:
 
   NodeStatus status() const;
 
+  bool has_failed() const;
+
   /// Name of the instance, not the type
   const std::string& name() const;
 
@@ -181,6 +183,25 @@ public:
 
   // Notify the tree should be ticked again()
   void emitStateChanged();
+  void setParent(TreeNode* parent)
+  {
+    parent_ = parent;
+  }
+
+  TreeNode* getParent() const
+  {
+    return parent_;
+  }
+
+  std::string short_description() const
+  {
+    std::string str = name();
+    if (str.empty())
+    {
+      str = registration_ID_;
+    }
+    return str;
+  }
 
 protected:
   /// Method to be implemented by the user
@@ -202,6 +223,9 @@ protected:
 
 private:
   const std::string name_;
+  TreeNode* parent_;
+
+  bool failed_ = false;
 
   NodeStatus status_;
 

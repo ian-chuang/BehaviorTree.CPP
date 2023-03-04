@@ -84,14 +84,14 @@ inline TreeNodeManifest CreateManifest(const std::string& ID,
 #ifdef BT_PLUGIN_EXPORT
 
 #if defined(_WIN32)
-  #define BTCPP_EXPORT extern "C" __declspec(dllexport)
+#define BTCPP_EXPORT extern "C" __declspec(dllexport)
 #else
-  // Unix-like OSes
-  #define BTCPP_EXPORT extern "C" __attribute__ ((visibility ("default")))
+// Unix-like OSes
+#define BTCPP_EXPORT extern "C" __attribute__((visibility("default")))
 #endif
 
 #else
-  #define BTCPP_EXPORT static
+#define BTCPP_EXPORT static
 #endif
 /* Use this macro to automatically register one or more custom Nodes
 * into a factory. For instance:
@@ -191,7 +191,8 @@ public:
    *
    * @return should return only SUCCESS or FAILURE.
    */
-  NodeStatus tickRootWhileRunning(std::chrono::milliseconds sleep_time = std::chrono::milliseconds(10))
+  NodeStatus tickRootWhileRunning(
+      std::chrono::milliseconds sleep_time = std::chrono::milliseconds(10))
   {
     NodeStatus status = tickRoot();
 

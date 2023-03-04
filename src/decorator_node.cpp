@@ -26,7 +26,8 @@ void DecoratorNode::setChild(TreeNode* child)
     throw BehaviorTreeException("Decorator [", name(), "] has already a child assigned");
   }
 
-  child_node_ = child;
+    child_node_ = child;
+    child->setParent(this);
 }
 
 void DecoratorNode::halt()
