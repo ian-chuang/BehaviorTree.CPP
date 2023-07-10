@@ -145,9 +145,20 @@ void BehaviorTreeFactory::registerBuilder(const TreeNodeManifest& manifest,
   _p->manifests.insert({manifest.registration_ID, manifest});
 }
 
-void BehaviorTreeFactory::registerSimpleCondition(
-    const std::string& ID, const SimpleConditionNode::TickFunctor& tick_functor,
-    PortsList ports)
+void BehaviorTreeFactory::registerSimpleCondition(const std::string& ID,
+                                                  const std::function<bool(TreeNode&)>& tick_bool_functor,
+                                                  PortsList ports)
+{
+    auto tick_functor = [tick_bool_functor](TreeNode& parent_node) -> NodeStatus {
+        return tick_bool_functor(parent_node) ? NodeStatus::SUCCESS : NodeStatus::FAILURE;
+    };
+
+    registerSimpleCondition(ID, tick_functor, ports);
+}
+
+void BehaviorTreeFactory::registerSimpleCondition(const std::string& ID,
+                                                  const SimpleConditionNode::TickFunctor& tick_functor,
+                                                  PortsList ports)
 {
   NodeBuilder builder = [tick_functor, ID](const std::string& name,
                                            const NodeConfig& config) {
@@ -158,9 +169,20 @@ void BehaviorTreeFactory::registerSimpleCondition(
   registerBuilder(manifest, builder);
 }
 
-void BehaviorTreeFactory::registerSimpleAction(
-    const std::string& ID, const SimpleActionNode::TickFunctor& tick_functor,
-    PortsList ports)
+void BehaviorTreeFactory::registerSimpleAction(const std::string& ID,
+                                               const std::function<bool(TreeNode&)>& tick_bool_functor,
+                                               PortsList ports)
+{
+    auto tick_functor = [tick_bool_functor](TreeNode& parent_node) -> NodeStatus {
+        return tick_bool_functor(parent_node) ? NodeStatus::SUCCESS : NodeStatus::FAILURE;
+    };
+
+    registerSimpleAction(ID, tick_functor, ports);
+}
+
+void BehaviorTreeFactory::registerSimpleAction(const std::string& ID,
+                                               const SimpleActionNode::TickFunctor& tick_functor,
+                                               PortsList ports)
 {
   NodeBuilder builder = [tick_functor, ID](const std::string& name,
                                            const NodeConfig& config) {

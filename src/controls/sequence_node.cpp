@@ -33,6 +33,16 @@ void SequenceNode::halt()
   ControlNode::halt();
 }
 
+TreeNode* SequenceNode::getNextSibling(TreeNode* child) {
+    ptrdiff_t i = distance(children_nodes_.begin(), find(children_nodes_.begin(), children_nodes_.end(), child));
+    if ( i + 1 < childrenCount()) {
+        return children_nodes_.at(i + 1);
+    }
+    else {
+        return nullptr;
+    }
+}
+
 NodeStatus SequenceNode::tick()
 {
   const size_t children_count = children_nodes_.size();

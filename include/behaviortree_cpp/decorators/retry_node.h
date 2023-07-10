@@ -58,6 +58,14 @@ private:
   int try_count_;
   bool all_skipped_ = true;
 
+  bool is_retrying() const {
+      return try_count_ > 0;
+  }
+
+  int n_th_retry() const {
+      return try_count_;
+  }
+
   bool read_parameter_from_ports_;
   static constexpr const char* NUM_ATTEMPTS = "num_attempts";
 

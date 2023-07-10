@@ -52,7 +52,8 @@ struct TreeNode::PImpl
 
 
 TreeNode::TreeNode(std::string name, NodeConfig config) :
-  _p(new PImpl(std::move(name), std::move(config)))
+  _p(new PImpl(std::move(name), std::move(config))),
+  parent_(nullptr)
 {
 }
 
@@ -266,6 +267,10 @@ NodeStatus TreeNode::status() const
 {
   std::lock_guard<std::mutex> lock(_p->state_mutex);
   return _p->status;
+}
+
+bool TreeNode::has_failed() const {
+    return failed_;
 }
 
 NodeStatus TreeNode::waitValidStatus()

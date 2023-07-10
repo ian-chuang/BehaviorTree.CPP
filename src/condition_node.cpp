@@ -27,6 +27,19 @@ SimpleConditionNode::SimpleConditionNode(const std::string& name,
 
 NodeStatus SimpleConditionNode::tick()
 {
-  return tick_functor_(*this);
+    NodeStatus prev_status = status();
+
+    if (prev_status == NodeStatus::IDLE)
+    {
+        setStatus(NodeStatus::RUNNING);
+        prev_status = NodeStatus::RUNNING;
+    }
+
+    NodeStatus status = tick_functor_(*this);
+    if (status != prev_status)
+    {
+        setStatus(status);
+    }
+    return status;
 }
 }   // namespace BT

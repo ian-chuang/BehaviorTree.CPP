@@ -46,6 +46,8 @@ private:
   bool all_skipped_ = true;
   bool asynch_ = false;
 
+  TreeNode* getNextSibling(TreeNode* child);
+
   virtual BT::NodeStatus tick() override;
 };
 

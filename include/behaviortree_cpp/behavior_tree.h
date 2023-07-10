@@ -53,6 +53,13 @@
 
 namespace BT
 {
+
+//Call the visitor for each node of the tree, given a root. If visitor returns true, stop visiting its descendants if any.
+void applyRecursiveVisitorSelectively(const TreeNode* node, const std::function<bool(const TreeNode*)>& visitor);
+
+//Call the visitor for each node of the tree, given a root. If visitor returns true, stop visiting its descendants if any.
+void applyRecursiveVisitorSelectively(TreeNode* node, const std::function<bool(TreeNode*)>& visitor);
+
 //Call the visitor for each node of the tree, given a root.
 void applyRecursiveVisitor(const TreeNode* root_node,
                            const std::function<void(const TreeNode*)>& visitor);
