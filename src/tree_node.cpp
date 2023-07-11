@@ -24,6 +24,10 @@ struct TreeNode::PImpl
     config(std::move(config))
   {}
 
+  TreeNode *parent = nullptr;
+
+  bool failed = false;
+
   const std::string name;
 
   NodeStatus status = NodeStatus::IDLE;
@@ -52,8 +56,7 @@ struct TreeNode::PImpl
 
 
 TreeNode::TreeNode(std::string name, NodeConfig config) :
-  _p(new PImpl(std::move(name), std::move(config))),
-  parent_(nullptr)
+  _p(new PImpl(std::move(name), std::move(config)))
 {
 }
 
@@ -159,6 +162,10 @@ void TreeNode::setStatus(NodeStatus new_status)
     std::unique_lock<std::mutex> UniqueLock(_p->state_mutex);
     prev_status = _p->status;
     _p->status = new_status;
+
+    if (_p->status == NodeStatus::FAILURE) {
+      _p->failed = true;
+    }
   }
   if (prev_status != new_status)
   {
@@ -270,7 +277,7 @@ NodeStatus TreeNode::status() const
 }
 
 bool TreeNode::has_failed() const {
-    return failed_;
+    return _p->failed;
 }
 
 NodeStatus TreeNode::waitValidStatus()
@@ -397,6 +404,22 @@ Expected<StringView> TreeNode::getRemappedKey(StringView port_name,
     return {stripBlackboardPointer(remapped_port)};
   }
   return nonstd::make_unexpected("Not a blackboard pointer");
+}
+
+void TreeNode::setParent(TreeNode *parent) {
+  _p->parent = parent;
+}
+
+TreeNode* TreeNode::getParent() const {
+  return _p->parent;
+}
+
+std::string TreeNode::short_description() const {
+  std::string str = name();
+  if (str.empty()) {
+      str = _p->registration_ID;
+  }
+  return str;
 }
 
 void TreeNode::emitWakeUpSignal()

@@ -298,21 +298,11 @@ public:
   static Expected<StringView> getRemappedKey(StringView port_name,
                                              StringView remapped_port);
 
-  void setParent(TreeNode *parent) {
-      parent_ = parent;
-  }
+  void setParent(TreeNode *parent);
 
-  TreeNode* getParent() const {
-      return parent_;
-  }
+  TreeNode* getParent() const;
 
-  std::string short_description() const {
-      std::string str = name();
-      if (str.empty()) {
-          str = registration_ID_;
-      }
-      return str;
-  }
+  std::string short_description() const;
 
   /// Notify that the tree should be ticked again()
   void emitWakeUpSignal();
@@ -381,9 +371,6 @@ private:
 
   struct PImpl;
   std::unique_ptr<PImpl> _p;
-
-  TreeNode *parent_;
-  bool failed_ = false;
 
   Expected<NodeStatus> checkPreConditions();
   void checkPostConditions(NodeStatus status);

@@ -21,7 +21,7 @@ public:
 
   virtual void flush() override;
 
-private:
+// private:
 
   virtual void callback(Duration timestamp, const TreeNode& node,
                         NodeStatus prev_status, NodeStatus status) override;
