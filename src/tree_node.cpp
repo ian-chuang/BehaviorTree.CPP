@@ -414,12 +414,66 @@ TreeNode* TreeNode::getParent() const {
   return _p->parent;
 }
 
-std::string TreeNode::short_description() const {
-  std::string str = name();
-  if (str.empty()) {
-      str = _p->registration_ID;
+std::string TreeNode::short_description() const
+{
+  std::string desc = name();
+  if (desc.empty())
+  {
+    desc = _p->registration_ID;
   }
-  return str;
+
+  if (!config().blackboard)
+  {
+    return desc;
+  }
+
+  std::string new_desc;
+  size_t len = desc.length();
+  // Iterate through the desc string
+  for (size_t i = 0; i < len; ++i)
+  {
+    // Check if we have an opening bracket '{'
+    if (desc[i] == '{')
+    {
+      size_t j = i + 1;
+      std::string enclosedSubstring;
+
+      // Find the closing bracket '}' for the enclosed substring
+      while (j < len && desc[j] != '}')
+      {
+        enclosedSubstring += desc[j];
+        ++j;
+      }
+
+      // If the closing bracket '}' is found and the enclosed substring is in the dictionary, replace it
+      auto found = false;
+      if (j < len)
+      {
+        auto any_ref = config().blackboard->getAnyLocked(std::string(enclosedSubstring));
+        auto val = any_ref.get();
+        if (val != nullptr && !val->empty() && val->type() == typeid(std::string))
+        {
+          new_desc += val->cast<std::string>();
+          found = true;
+        }
+      }
+
+      if (!found)
+      {
+        // If the closing bracket is not found, or the enclosed substring is not in the dictionary,
+        // append the previously collected substring (without the brackets)
+        new_desc += enclosedSubstring;
+      }
+      
+      i = j;   // Move the outer loop iterator to skip the enclosed substring
+    }
+    else
+    {
+      new_desc += desc[i];   // Append other characters as is
+    }
+  }
+
+  return new_desc;
 }
 
 void TreeNode::emitWakeUpSignal()
