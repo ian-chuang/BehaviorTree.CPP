@@ -47,6 +47,18 @@ public:
                                        "Use -1 to create an infinite loop.")};
   }
 
+  bool is_repeating() const {
+      return repeat_count_ > 0;
+  }
+
+  int n_th_repeat() const {
+      return repeat_count_;
+  }
+
+  bool do_loop() const {
+      return repeat_count_ < num_cycles_ || num_cycles_ == -1;
+  }
+
 private:
   int num_cycles_;
   int repeat_count_;

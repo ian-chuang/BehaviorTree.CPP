@@ -61,6 +61,10 @@ public:
     return try_count_;
   }
 
+  bool do_loop() const {
+      return try_count_ < max_attempts_ || max_attempts_ == -1;
+  }
+
 private:
   int max_attempts_;
   int try_count_;
