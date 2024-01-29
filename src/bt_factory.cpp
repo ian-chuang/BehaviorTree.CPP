@@ -70,6 +70,7 @@ BehaviorTreeFactory::BehaviorTreeFactory():
   registerNodeType<TimeoutNode<>>("Timeout");
   registerNodeType<DelayNode>("Delay");
   registerNodeType<RunOnceNode>("RunOnce");
+  registerNodeType<ExplainNode>("Explain");
 
   registerNodeType<ForceSuccessNode>("ForceSuccess");
   registerNodeType<ForceFailureNode>("ForceFailure");
